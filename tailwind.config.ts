@@ -71,11 +71,11 @@ const config = {
           "0%,70%,100%": { opacity: "1" },
           "20%,50%": { opacity: "0" },
         },
-        "slide-right" : {
-          "from" : {
+        "slide-right": {
+          from: {
             backgroundPosition: "right bottom",
           },
-          "to" : {
+          to: {
             backgroundPosition: "left bottom",
           },
         },
@@ -84,7 +84,7 @@ const config = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "caret-blink": "caret-blink 1.25s ease-out infinite",
-        "slide-right" : "slide-right .5s ease-in-out"
+        "slide-right": "slide-right .5s ease-in-out",
       },
     },
   },
