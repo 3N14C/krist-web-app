@@ -1,0 +1,127 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider   = "prisma-client-js"
+  engineType = "binary"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// USER
+enum Role {
+  USER
+  ADMIN
+}
+
+model Session {
+  id String @id @default(uuid())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id String @id @default(uuid())
+
+  username String @unique
+  email    String @unique
+  password String
+
+  phone  String?
+  avatar String?
+
+  role    Role      @default(USER)
+  Session Session[]
+  review  Review[]
+  order   Order[]
+}
+
+// PRODUCTS CATEGORY COLLECTION
+model Category {
+  id String @id @default(uuid())
+
+  name String
+
+  collection Collection[]
+  product    Product[]
+}
+
+model Collection {
+  id String @id @default(uuid())
+
+  name String
+  img  String
+
+  category   Category? @relation(fields: [categoryId], references: [id])
+  categoryId String?
+  product    Product[]
+}
+
+model Size {
+  id String @id @default(uuid())
+
+  name String @unique
+
+  products Product[]
+}
+
+model Color {
+  id String @id @default(uuid())
+
+  name  String @unique
+  color String
+
+  products Product[]
+}
+
+model Review {
+  id String @id @default(uuid())
+
+  rating   Float
+  title    String
+  body     String
+  dateTime DateTime @default(now())
+
+  user     User[]
+  products Product[]
+}
+
+model Product {
+  id String @id @default(uuid())
+
+  name        String
+  img         String
+  price       Int
+  description String
+
+  category     Category   @relation(fields: [categoryId], references: [id])
+  categoryId   String
+  collection   Collection @relation(fields: [collectionId], references: [id])
+  collectionId String
+
+  sizes   Size[]
+  colors  Color[]
+  reviews Review[]
+  order   Order[]
+}
+
+model Order {
+  id String @id @default(uuid())
+
+  createdAt DateTime @default(now())
+  status    String   @default("В пути")
+  size      String
+  quantity  Int
+
+  user      User    @relation(fields: [userId], references: [id])
+  product   Product @relation(fields: [productId], references: [id])
+  userId    String
+  productId String
+}
