@@ -3,6 +3,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { FC } from "react";
 import { icons } from "lucide-react";
+import { INotification } from "@/interfaces/notification.interface";
 
 interface IProps {
   notifications: INotification[];
