@@ -1,7 +1,6 @@
 import { Providers } from "@/providers/Providers";
 import type { Metadata } from "next";
 import { Jost } from "next/font/google";
-import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { Footer } from "@/components/footer/footer";
 
