@@ -1,7 +1,6 @@
 "use client";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { INotification } from "@/store/notifications-store";
 import { FC } from "react";
 import { icons } from "lucide-react";
 
