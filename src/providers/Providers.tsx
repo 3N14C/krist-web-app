@@ -6,7 +6,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { trpc } from "@/trpc-client/client";
 import { httpBatchLink } from "@trpc/client";
 import { EdgeStoreProvider } from "@/lib/edgestore";
-import "../app/globals.css";
 
 export const Providers: FC<{ children: ReactNode }> = ({ children }) => {
   const [queryClient] = useState(() => new QueryClient());

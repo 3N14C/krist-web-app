@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Jost } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
 import { Footer } from "@/components/footer/footer";
+import './globals.css'
 
 const jost = Jost({
   weight: ["100", "200", "300", "400", "600", "700", "800", "900"],
