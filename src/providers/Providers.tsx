@@ -11,7 +11,11 @@ export const Providers: FC<{ children: ReactNode }> = ({ children }) => {
   const [queryClient] = useState(() => new QueryClient());
   const [trpcClient] = useState(() =>
     trpc.createClient({
-      links: [httpBatchLink({ url: "https://krist-web-app.vercel.app//api" })],
+      links: [
+        httpBatchLink({
+          url: process.env.SERVER_URL || "https://krist-web-app.vercel.app/api",
+        }),
+      ],
     })
   );
 
