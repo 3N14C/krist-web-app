@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { CustomTitle } from "@/components/ui/custom-title";
+import { useResponsive } from "@/hooks/useResponsive";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -9,6 +10,32 @@ import { FC } from "react";
 
 export const MainSection: FC = () => {
   const router = useRouter();
+
+  const { isMobile } = useResponsive();
+
+  if (isMobile) {
+    return (
+      <>
+        <div className="mt-[20px]">
+          <div className="flex flex-col gap-[20px]">
+            {/* <CustomTitle title="Эксклюзивная классика" className="text-lg" /> */}
+            <p className="text-4xl font-semibold leading-none max-w-[100px]">
+              Женская Коллекция
+            </p>
+            <p className="text-4xl font-medium leading-none">ДО 40%</p>
+
+            <Button
+              onClick={() => router.push("/products-catalog")}
+              size={"sm"}
+              className=" text-base py-5 w-[200px] flex items-center gap-[10px]"
+            >
+              Заказать сейчас <ArrowRight />
+            </Button>
+          </div>
+        </div>
+      </>
+    );
+  }
 
   return (
     <div className="bg-[#f3f3f3] dark:bg-[#1f1f1f] mt-[20px] -z-10">

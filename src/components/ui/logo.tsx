@@ -13,7 +13,7 @@ export const Logo: FC<Props> = ({ className, color }) => {
   const { theme } = useTheme();
 
   return (
-    <Link href={"/"} className="">
+    <Link href={"/"} className={className}>
       <svg
         width="143"
         height="44"

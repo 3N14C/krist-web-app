@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "@/lib/utils";
 import { FC } from "react";
 
 interface IProps {
@@ -9,6 +10,8 @@ interface IProps {
 
 export const CustomTitle: FC<IProps> = ({ title, className }) => {
   return (
-    <p className={`text-4xl font-medium leading-none ${className}`}>{title}</p>
+    <p className={cn('text-4xl font-medium leading-none', className, {
+      'text-4xl': !className
+    })}>{title}</p>
   );
 };
