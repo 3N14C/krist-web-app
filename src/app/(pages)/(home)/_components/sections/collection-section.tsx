@@ -39,7 +39,7 @@ export const CollectionSection: FC = () => {
       <div className="flex items-center justify-between">
         <CustomTitle title="Коллекции" />
 
-        <div className="flex items-center gap-[10px]">
+        <div className="flex items-center gap-[10px] max-[845px]:hidden">
           <Button
             disabled={isLoading || pagination.active === 1}
             onClick={pagination.previous}

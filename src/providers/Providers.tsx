@@ -13,7 +13,7 @@ export const Providers: FC<{ children: ReactNode }> = ({ children }) => {
     trpc.createClient({
       links: [
         httpBatchLink({
-          url: "https://krist-web-app.vercel.app/api",
+          url: "http://localhost:3000/api",
         }),
       ],
     })

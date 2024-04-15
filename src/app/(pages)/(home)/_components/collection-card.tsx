@@ -12,7 +12,7 @@ interface IProps {
 
 export const CollectionCard: FC<IProps> = ({ collections }) => {
   return (
-    <div className="grid lg:grid-cols-3 justify-items-center">
+    <div className="grid lg:grid-cols-3 justify-items-center max-[845px]:gap-10">
       {collections?.map((collection) => (
         <Link
           href={`/products-catalog/?categoryId=${collection.categoryId}&collectionId=${collection.id}`}

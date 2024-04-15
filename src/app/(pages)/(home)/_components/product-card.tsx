@@ -32,7 +32,7 @@ export const ProductCard: FC<IProps> = ({ products, gridCols }) => {
   return (
     <div
       className={cn("grid gap-10", gridCols, {
-        "grid-cols-3": !gridCols,
+        "lg:grid-cols-3": !gridCols,
       })}
     >
       {products?.map((product) => (

@@ -40,7 +40,7 @@ export const BestSeller: FC = async () => {
 
       <div className="mt-10">
         {/* @ts-ignore */}
-        <ProductCard gridCols="grid-cols-4" products={products} />
+        <ProductCard gridCols="lg:grid-cols-4" products={products} />
       </div>
     </div>
   );

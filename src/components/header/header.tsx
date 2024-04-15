@@ -1,30 +1,32 @@
-"use client";
-
+import Image from "next/image";
 import { FC } from "react";
 import { Logo } from "../ui/logo";
 import { NavbarHeader } from "./navbar-header";
 import { ToolsHeader } from "./tools-header";
-import { useResponsive } from "@/hooks/useResponsive";
+import { MobileMenu } from "./mobile/mobile-menu";
 
 export const Header: FC = () => {
-  const { isMobile } = useResponsive();
-
-  if (isMobile) {
-    return (
-      <div className="">
-        <Logo className="text-md" />
-        <div className=""></div>
-      </div>
-    );
-  }
-
   return (
-    <div className="flex items-center justify-between">
-      <Logo />
+    <div className="">
+      <div className="flex items-center justify-between max-[845px]:hidden">
+        <Logo />
 
-      <NavbarHeader />
+        <NavbarHeader />
 
-      <ToolsHeader />
+        <ToolsHeader />
+      </div>
+
+      <div className="lg:hidden flex items-center justify-between">
+        <Image
+          src={"/logo.svg"}
+          alt="logo"
+          width={1000}
+          height={1000}
+          className="w-32 h-32"
+        />
+
+        <MobileMenu />
+      </div>
     </div>
   );
 };
