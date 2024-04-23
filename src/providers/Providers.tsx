@@ -22,7 +22,7 @@ export const Providers: FC<{ children: ReactNode }> = ({ children }) => {
   return (
     <trpc.Provider queryClient={queryClient} client={trpcClient}>
       <QueryClientProvider client={queryClient}>
-        <ThemeProvider attribute="class" enableSystem>
+        <ThemeProvider attribute="class" defaultTheme="light">
           <EdgeStoreProvider>{children}</EdgeStoreProvider>
         </ThemeProvider>
       </QueryClientProvider>
