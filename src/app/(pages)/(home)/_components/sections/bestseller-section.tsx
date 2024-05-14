@@ -2,6 +2,7 @@ import { CustomTitle } from "@/components/ui/custom-title";
 import { FC } from "react";
 import { ProductCard } from "../product-card";
 import prisma from "../../../../../../prisma/prisma-client";
+import { cn } from "@/lib/utils";
 
 const getProducts = async () => {
   const products = await prisma.product.findMany({
@@ -25,6 +26,7 @@ const getProducts = async () => {
     include: {
       sizes: true,
       colors: true,
+      reviews: true,
     },
   });
 
@@ -39,8 +41,12 @@ export const BestSeller: FC = async () => {
       <CustomTitle title="Лучшие товары" className="text-center" />
 
       <div className="mt-10">
-        {/* @ts-ignore */}
-        <ProductCard gridCols="lg:grid-cols-4" products={products} />
+        <ProductCard
+          products={products}
+          gridCols={cn("lg:grid-cols-4", {
+            "lg:grid-cols-3 justify-items-center": products.length === 3,
+          })}
+        />
       </div>
     </div>
   );

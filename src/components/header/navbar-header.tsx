@@ -75,10 +75,10 @@ export const NavbarHeader = () => {
         <div className="flex items-center gap-[20px]">
           <NavigationMenuItem>
             <NavigationMenuLink
-              href="/our-story"
+              href="/services"
               className="text-lg font-medium"
             >
-              О нас
+              Услуги
             </NavigationMenuLink>
           </NavigationMenuItem>
 

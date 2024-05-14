@@ -10,8 +10,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("POSTGRES_PRISMA_URL")
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL")
   directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
@@ -38,10 +38,14 @@ model User {
   phone  String?
   avatar String?
 
-  role    Role      @default(USER)
-  Session Session[]
-  review  Review[]
-  order   Order[]
+  role                 Role                @default(USER)
+  Session              Session[]
+  review               Review[]
+  order                Order[]
+  orderService         OrderService?       @relation(fields: [orderServiceId], references: [id])
+  orderServiceId       String?
+  CustomOrderService   CustomOrderService? @relation(fields: [customOrderServiceId], references: [id])
+  customOrderServiceId String?
 }
 
 // PRODUCTS CATEGORY COLLECTION
@@ -125,4 +129,31 @@ model Order {
   product   Product @relation(fields: [productId], references: [id])
   userId    String
   productId String
+}
+
+model Service {
+  id String @id @default(uuid())
+
+  name         String
+  img          String?
+  orderService OrderService[]
+}
+
+model OrderService {
+  id String @id @default(uuid())
+
+  user User[]
+
+  createdAt DateTime @default(now())
+
+  service   Service @relation(fields: [serviceId], references: [id])
+  serviceId String
+}
+
+model CustomOrderService {
+  id String @id @default(uuid())
+
+  user    User[]
+  title   String
+  message String
 }
