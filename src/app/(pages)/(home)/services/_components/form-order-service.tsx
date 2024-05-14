@@ -42,7 +42,7 @@ export const FormOrderService: FC = () => {
           message: data.message,
           title: data.title,
         })
-      : router.replace("/auth/login");
+      : router.replace("/auth/login?from=/services");
   };
 
   return (

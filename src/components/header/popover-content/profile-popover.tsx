@@ -8,16 +8,15 @@ import { toast } from "sonner";
 
 export const ProfilePopover: FC = () => {
   const { mutateAsync, isLoading: isLoadingLogout } =
-    trpc.authUser.logoutUser.useMutation();
-
-  const handleLogout = async () => {
-    await mutateAsync(undefined, {
+    trpc.authUser.logoutUser.useMutation({
       onSuccess: () => {
         toast.success("Вы вышли из аккаунта");
         window.location.reload();
-        window.location.replace("/");
       },
     });
+
+  const handleLogout = async () => {
+    await mutateAsync();
   };
 
   return (

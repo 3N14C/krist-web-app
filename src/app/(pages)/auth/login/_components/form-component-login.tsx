@@ -6,7 +6,7 @@ import { trpc } from "@/trpc-client/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { FC } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -15,6 +15,9 @@ import { FormTitle } from "../../_components/form-title";
 import { InputValidated } from "../../_components/input-validated";
 
 export const FormComponentLogin: FC = () => {
+  const searchParams = useSearchParams();
+  const from = searchParams.get("from");
+  console.log(from);
   const { mutateAsync, isLoading } = trpc.authUser.loginUser.useMutation();
   const router = useRouter();
 
@@ -36,7 +39,7 @@ export const FormComponentLogin: FC = () => {
       await mutateAsync(data, {
         onSuccess: () => {
           toast.success("Аутентикация прошла успешно");
-          router.replace("/");
+          router.replace(from ? from : "/");
         },
 
         onError: (error) => {
