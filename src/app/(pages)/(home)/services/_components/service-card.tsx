@@ -5,6 +5,7 @@ import { createServiceOrderSchema } from "@/server/zod-validators/post-create-se
 import { trpc } from "@/trpc-client/client";
 import { Service } from "@prisma/client";
 import { FC } from "react";
+import { toast } from "sonner";
 import { z } from "zod";
 
 interface IProps {
@@ -13,7 +14,11 @@ interface IProps {
 
 export const ServiceCard: FC<IProps> = ({ service }) => {
   const { mutateAsync } =
-    trpc.createOrderService.createServiceOrder.useMutation();
+    trpc.createOrderService.createServiceOrder.useMutation({
+      onSuccess: () => {
+        toast.success("Заявка успешно отправлена");
+      },
+    });
   const { data: user } = trpc.authUser.getUserSession.useQuery();
 
   const handleCreateOrder = async (
