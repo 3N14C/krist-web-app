@@ -16,7 +16,7 @@ export const POST = async (req: NextRequest) => {
     },
   });
 
-  const jwt = await new jose.SignJWT({})
+  const jwt = await new jose.SignJWT({ role: user.role })
     .setProtectedHeader({ alg: "HS256" })
     .setExpirationTime("30d")
     .setSubject(user.id.toString())

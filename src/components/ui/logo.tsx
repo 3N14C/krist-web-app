@@ -14,7 +14,12 @@ export const Logo: FC<Props> = ({ className, color }) => {
 
   return (
     <Link href={"/"} className={className}>
-      <svg
+      <div className="flex items-baseline">
+        <p className="text-6xl font-bold">B</p>
+        <p className="text-6xl font-bold">oss</p>
+      </div>
+
+      {/* <svg
         width="143"
         height="44"
         viewBox="0 0 143 44"
@@ -57,7 +62,7 @@ export const Logo: FC<Props> = ({ className, color }) => {
           d="M130.428 15.8379H143V19.9374H130.428V15.8379ZM134.528 7.09226H138.9V40.9814H134.528V7.09226Z"
           fill={color || theme === "dark" ? "#ffff" : "#1b1b1b"}
         />
-      </svg>
+      </svg> */}
     </Link>
   );
 };

@@ -62,7 +62,7 @@ export const Reviews: FC<IProps> = ({ product }) => {
                 <p className="text-lg font-bold">{review?.title}</p>
                 <p className="text-lg text-[#454349]">{review?.body}</p>
                 <p>
-                  <span className="text-[#a3a3a3]">Отзыв одобрен</span> Krist{" "}
+                  <span className="text-[#a3a3a3]">Отзыв одобрен</span> Boss{" "}
                   <span className="text-[#a3a3a3]">опубликован</span>{" "}
                   {new Date(review.dateTime).toLocaleDateString("ru")}
                 </p>

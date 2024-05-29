@@ -118,7 +118,7 @@ export const Footer: FC = () => {
 
             <div className="flex items-center gap-2">
               <Mail />
-              <p>krist@example.com</p>
+              <p>boss@example.com</p>
             </div>
 
             <div className="flex items-start gap-2">
