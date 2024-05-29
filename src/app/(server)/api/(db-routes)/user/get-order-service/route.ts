@@ -16,7 +16,7 @@ export const GET = async (req: NextRequest) => {
           service: true,
         },
       },
-      CustomOrderService: true,
+      customOrderService: true,
     },
   });
 
