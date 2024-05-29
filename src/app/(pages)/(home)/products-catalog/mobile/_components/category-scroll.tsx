@@ -1,13 +1,17 @@
 "use client";
 
+import { CategoryService } from "@/actions/category/category-service";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { trpc } from "@/trpc-client/client";
 import { Category } from "@prisma/client";
+import { useQuery } from "@tanstack/react-query";
 import { parseAsArrayOf, parseAsString, useQueryState } from "nuqs";
 import { FC } from "react";
 
 export const CategoryScroll: FC = () => {
-  const { data: categories } = trpc.category.getCategories.useQuery();
+  const { data: categories } = useQuery({
+    queryKey: ["all-categories"],
+    queryFn: CategoryService.getAll,
+  });
 
   const [categoryParams, setCategoryParams] = useQueryState(
     "categoryId",

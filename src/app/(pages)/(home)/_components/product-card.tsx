@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useCartStore } from "@/store/cart-store";
 import { useWishlistStore } from "@/store/wishlist-store";
-import { Prisma, Product } from "@prisma/client";
+import { BestSellerProduct } from "@/types/product-type";
+import { Product } from "@prisma/client";
 import { Heart } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -12,13 +13,7 @@ import { FC, useState } from "react";
 import { toast } from "sonner";
 
 interface IProps {
-  products: Prisma.ProductGetPayload<{
-    include: {
-      reviews: true;
-      colors: true;
-      sizes: true;
-    };
-  }>[];
+  products: BestSellerProduct[];
 
   gridCols?: string;
 }

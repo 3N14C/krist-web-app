@@ -1,5 +1,8 @@
 "use client";
 
+import { CategoryService } from "@/actions/category/category-service";
+import { ColorService } from "@/actions/color/color-service";
+import { SizeService } from "@/actions/size/size-service";
 import {
   Accordion,
   AccordionContent,
@@ -9,25 +12,31 @@ import {
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Slider } from "@/components/ui/slider";
-import { trpc } from "@/trpc-client/client";
 import { Category, Color, Size } from "@prisma/client";
+import { useQuery } from "@tanstack/react-query";
 import { parseAsArrayOf, parseAsInteger, useQueryState } from "nuqs";
 import { useState } from "react";
+import { ServicesList } from "../product/[collectionId]/[productId]/_components/services-list";
 import { FilterCategory } from "./_components/filters/filter-category";
 import { FilterColor } from "./_components/filters/filter-color";
 import { FilterSize } from "./_components/filters/filter-size";
-import { ServicesList } from "../product/[collectionId]/[productId]/_components/services-list";
 import { MobileLayout } from "./mobile/mobile-layout";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
-  const { data: category, isLoading: isLoadingCategory } =
-    trpc.category.getCategories.useQuery();
+  const { data: category, isLoading: isLoadingCategory } = useQuery({
+    queryKey: ["all-categories"],
+    queryFn: CategoryService.getAll,
+  });
 
-  const { data: colors, isLoading: isLoadingColors } =
-    trpc.colors.getColors.useQuery();
+  const { data: colors, isLoading: isLoadingColors } = useQuery({
+    queryKey: ["colors"],
+    queryFn: ColorService.getAll,
+  });
 
-  const { data: sizes, isLoading: isLoadingSizes } =
-    trpc.sizes.getSizes.useQuery();
+  const { data: sizes, isLoading: isLoadingSizes } = useQuery({
+    queryKey: ["sizes"],
+    queryFn: SizeService.getAll,
+  });
 
   const [price, setPrice] = useState([10]);
   const [priceParams, setPriceParams] = useQueryState(

@@ -1,5 +1,6 @@
 "use client";
 
+import { SizeService } from "@/actions/size/size-service";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -9,13 +10,16 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import { trpc } from "@/trpc-client/client";
 import { Color, Size } from "@prisma/client";
+import { useQuery } from "@tanstack/react-query";
 import { parseAsArrayOf, parseAsString, useQueryState } from "nuqs";
 import { FC } from "react";
 
 export const MobileSizeFilter: FC = () => {
-  const { data: sizes } = trpc.sizes.getSizes.useQuery();
+  const { data: sizes } = useQuery({
+    queryKey: ["sizes"],
+    queryFn: SizeService.getAll,
+  });
 
   const [sizeParams, setSizeParams] = useQueryState(
     "sizeId",

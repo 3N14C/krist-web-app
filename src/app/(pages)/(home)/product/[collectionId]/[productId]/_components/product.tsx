@@ -1,31 +1,26 @@
 "use client";
 
+import { ProductService } from "@/actions/product/product-service";
 import { Breadcrumbs } from "@/components/breadcrumbs";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { cn } from "@/lib/utils";
-import { useCartStore } from "@/store/cart-store";
-import { useWishlistStore } from "@/store/wishlist-store";
-import { trpc } from "@/trpc-client/client";
-import { Prisma, Product } from "@prisma/client";
-import { Heart, Minus, Plus, Star } from "lucide-react";
-import { babelIncludeRegexes } from "next/dist/build/webpack-config";
+import { Product } from "@prisma/client";
+import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
-import { parseAsString, useQueryState } from "nuqs";
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import { ColorPicker } from "./product-components/color-picker";
-import { SizePicker } from "./product-components/size-picker";
 import { ProductCounter } from "./product-components/item-counter";
 import { ProductNavbar } from "./product-components/product-navbar/product-navbar";
 import { ProductRating } from "./product-components/product-rating";
+import { SizePicker } from "./product-components/size-picker";
 
 interface IProps {
   productId: string;
 }
 
 export const ProductPage: FC<IProps> = ({ productId }) => {
-  const { data: product, isLoading } =
-    trpc.products.getProductById.useQuery(productId);
+  const { data: product, isLoading } = useQuery({
+    queryKey: ["product-by-id", productId],
+    queryFn: async () => await ProductService.getById({ productId }),
+  });
 
   const [focusSize, setFocusSize] = useState<number | null>(null);
   const [counter, setCounter] = useState<number>(1);
@@ -41,7 +36,7 @@ export const ProductPage: FC<IProps> = ({ productId }) => {
         <Breadcrumbs productName={product?.name} />
       </div>
 
-      <div className="mt-10 flex items-start justify-around">
+      <div className="mt-10 flex lg:flex-row flex-col items-start lg:justify-around">
         <div className="flex flex-col items-center">
           <Image
             src={product?.img || ""}
@@ -51,7 +46,7 @@ export const ProductPage: FC<IProps> = ({ productId }) => {
             className="object-cover w-fit h-fit"
           />
 
-          <div className="flex items-center mt-10 gap-3">
+          <div className="lg:flex hidden items-center mt-10 gap-3">
             {Array.from({ length: 4 }).map((_, index) => (
               <Image
                 key={index}
@@ -65,9 +60,9 @@ export const ProductPage: FC<IProps> = ({ productId }) => {
           </div>
         </div>
 
-        <div className="w-2/5 flex flex-col gap-4">
-          <div className="flex items-center justify-between">
-            <p className="text-4xl font-bold">{product?.name}</p>
+        <div className="lg:w-2/5 flex flex-col gap-4">
+          <div className="flex items-center lg:justify-between">
+            <p className="lg:text-4xl text-2xl font-bold">{product?.name}</p>
 
             {/* ДОБАВИТЬ СТАТУС В БД */}
             <p className="text-green-400 bg-[#ebfaeb] inline-block px-4 py-1">

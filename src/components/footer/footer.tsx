@@ -105,7 +105,7 @@ export const Footer: FC = () => {
 
   return (
     <div className="bg-[#1b1b1b] px-[60px] py-[60px]">
-      <div className="grid grid-cols-4 items-start">
+      <div className="grid lg:grid-cols-4 lg:gap-0 gap-10 items-start">
         {/* FIRST COLUMN */}
         <div className="text-[#bfbfc0]">
           <Logo color="#fff" className="text-white" />

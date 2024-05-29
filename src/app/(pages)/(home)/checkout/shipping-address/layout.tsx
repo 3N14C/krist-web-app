@@ -5,9 +5,11 @@ import { FC } from "react";
 import { CreateOrderStatus } from "./_components/create-order-status";
 import { CustomTitle } from "@/components/ui/custom-title";
 import { parseAsArrayOf, parseAsString, useQueryState } from "nuqs";
-import { trpc } from "@/trpc-client/client";
 import { useRouter } from "next/navigation";
 import { useCartStore } from "@/store/cart-store";
+import { useMutation } from "@tanstack/react-query";
+import { OrderService } from "@/actions/order/order-service";
+import { useSession } from "@/hooks/use-session";
 
 interface IProps {
   address: React.ReactNode;
@@ -18,36 +20,36 @@ interface IProps {
 const Layout: FC<IProps> = ({ address, payment, review }) => {
   const router = useRouter();
   const [orderPage] = useQueryState("orderPage", parseAsArrayOf(parseAsString));
-  const { mutateAsync: createOrder } =
-    trpc.createOrder.createOrder.useMutation();
 
-  const { data: user } = trpc.authUser.getUserSession.useQuery();
+  const { user } = useSession();
 
   const { productsCart, removeAllProducts } = useCartStore();
 
-  const { mutateAsync: checkout } = trpc.checkout.checkoutOrder.useMutation({
+  const { mutateAsync } = useMutation({
+    mutationFn: OrderService.create,
     onSuccess: ({ url, isPaid }) => {
       router.push(url);
-
-      productsCart.products.forEach(async (product) => {
-        await createOrder({
-          productId: product.id,
-          size: product?.size?.name || "Регулируемый",
-          quantity: product.count,
-
-          userId: user?.id || "",
-        });
-      });
 
       removeAllProducts();
     },
   });
 
+  const handleCheckout = async () => {
+    user?.id &&
+      (await mutateAsync({
+        totalPrice: productsCart.totalPrice + 5,
+        userId: user?.id,
+        products: productsCart.products,
+        quantity: 1,
+        size: "sm",
+      }));
+  };
+
   return (
     <div className="">
       <CustomTitle title="Адрес доставки" />
-      <div className="mt-10 grid grid-cols-4">
-        <div className="col-span-3">
+      <div className="mt-10 grid  lg:grid-cols-4">
+        <div className="lg:col-span-3">
           <CreateOrderStatus orderPage={orderPage || ["address"]} />
 
           <div className="">
@@ -67,14 +69,7 @@ const Layout: FC<IProps> = ({ address, payment, review }) => {
           <TotalOrder
             visible={orderPage?.includes("review")}
             buttonTitle="Оформить заказ"
-            onClick={async () => {
-              user?.id &&
-                (await checkout({
-                  totalPrice: productsCart.totalPrice + 5,
-                  userId: user?.id,
-                  products: productsCart.products,
-                }));
-            }}
+            onClick={handleCheckout}
           />
         </div>
       </div>

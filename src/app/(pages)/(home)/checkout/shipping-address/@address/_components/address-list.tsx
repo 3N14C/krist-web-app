@@ -1,17 +1,17 @@
 "use client";
 
 import { useAddressStore } from "@/store/address-store";
-import { trpc } from "@/trpc-client/client";
 import { useRouter } from "next/navigation";
 import { FC } from "react";
 import { AddressCard } from "./address-card";
 import { Button } from "@/components/ui/button";
 import { parseAsArrayOf, parseAsString, useQueryState } from "nuqs";
+import { useSession } from "@/hooks/use-session";
 
 export const AddressList: FC = () => {
   const { address, removeAddress, chooseAddress, chosenAddress } =
     useAddressStore();
-  const { data: user } = trpc.authUser.getUserSession.useQuery();
+  const { user } = useSession();
 
   const [orderPage, setOrderPage] = useQueryState(
     "orderPage",
@@ -29,6 +29,7 @@ export const AddressList: FC = () => {
       />
 
       <Button
+        disabled={address.length === 0}
         onClick={() => setOrderPage([...(orderPage || []), "payment"])}
         className="mt-10 text-xl py-8 px-20"
       >

@@ -38,7 +38,7 @@ export const ProductNavbar: FC<IProps> = ({ product }) => {
 
   return (
     <div className="">
-      <div className="mt-14 flex items-center gap-10 text-xl font-medium">
+      <div className="mt-14 flex items-center gap-10 lg:text-xl font-medium">
         {productPages.map((item) => (
           <p
             className={cn("cursor-pointer", {

@@ -2,15 +2,15 @@
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useSession } from "@/hooks/use-session";
 import { useCardStore } from "@/store/card-store";
-import { trpc } from "@/trpc-client/client";
 import { Trash2 } from "lucide-react";
 import { useQueryState, parseAsArrayOf, parseAsString } from "nuqs";
 import { FC } from "react";
 
 export const CardList: FC = () => {
   const { cards, removeCard, chooseCard, choosenCard } = useCardStore();
-  const { data: user } = trpc.authUser.getUserSession.useQuery();
+  const { user } = useSession();
 
   const [orderPage, setOrderPage] = useQueryState(
     "orderPage",
@@ -49,6 +49,7 @@ export const CardList: FC = () => {
       </div>
 
       <Button
+        disabled={cards.length === 0}
         onClick={() => setOrderPage([...(orderPage || []), "review"])}
         className="mt-10 text-xl py-8 px-20"
       >

@@ -2,9 +2,9 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useSession } from "@/hooks/use-session";
 import { cn } from "@/lib/utils";
 import { useCardStore } from "@/store/card-store";
-import { trpc } from "@/trpc-client/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Check } from "lucide-react";
 import Image from "next/image";
@@ -40,7 +40,7 @@ interface IProps {
 export const CardModalForm: FC<IProps> = ({ buttonClassName }) => {
   const [focus, setFocus] = useState<IBankCard | null>(null);
   const { addCard } = useCardStore();
-  const { data: user } = trpc.authUser.getUserSession.useQuery();
+  const { user } = useSession();
 
   const schema = z.object({
     cardNumber: z

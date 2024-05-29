@@ -26,7 +26,7 @@ export const InputValidated: FC<Props> = ({
       <Input
         placeholder={placeholder}
         className={cn(
-          "w-[445px] max-[639px]:w-[350px] px-[15px] py-[28px]",
+          "w-[445px] max-[639px]:w-[250px] px-[15px] py-[28px]",
           className,
           {
             "border-red-500": errors,

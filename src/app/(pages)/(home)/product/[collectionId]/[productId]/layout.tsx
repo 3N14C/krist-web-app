@@ -3,7 +3,7 @@ interface IProps {
 }
 
 const Layout = ({ children }: IProps) => {
-  return <div className="px-10">{children}</div>;
+  return <div className="lg:px-10">{children}</div>;
 };
 
 export default Layout;

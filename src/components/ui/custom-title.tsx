@@ -10,8 +10,12 @@ interface IProps {
 
 export const CustomTitle: FC<IProps> = ({ title, className }) => {
   return (
-    <p className={cn('text-4xl font-medium leading-none', className, {
-      'text-4xl': !className
-    })}>{title}</p>
+    <p
+      className={cn("lg:text-4xl text-xl font-medium leading-none", className, {
+        "lg:text-4xl text-xl": !className,
+      })}
+    >
+      {title}
+    </p>
   );
 };

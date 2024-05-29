@@ -1,14 +1,16 @@
 "use client";
 
+import { UserService } from "@/actions/user/user-service";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
+import { useSession } from "@/hooks/use-session";
 import { useEdgeStore } from "@/lib/edgestore";
 import { updateCurrentUserSchema } from "@/server/zod-validators/update-current-user.validator";
 import { useNotificationsStore } from "@/store/notifications-store";
-import { trpc } from "@/trpc-client/client";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Edit, Loader2 } from "lucide-react";
 import { FC, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -16,60 +18,57 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 export const FormEditProfile: FC = () => {
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const [fileAvatar, setFileAvatar] = useState<File>();
-  const [progress, setProgress] = useState<number>(0);
-
-  const [avatarPreview, setAvatarPreview] = useState<string>("");
+  const queryClient = useQueryClient();
+  const { user } = useSession();
   const { edgestore } = useEdgeStore();
-
-  const { data: user, isLoading: isLoadingUser } =
-    trpc.authUser.getUserSession.useQuery();
-
-  const { mutateAsync, isLoading: isLoadingChangeUser } =
-    trpc.authUser.updateCurrentUser.useMutation();
-
+  const [progress, setProgress] = useState<number>(0);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [avatarPreview, setAvatarPreview] = useState<string>("");
+  const [fileAvatar, setFileAvatar] = useState<File>();
   const { addNotification } = useNotificationsStore();
 
   const {
     register,
     formState: { errors },
     handleSubmit,
-    reset,
   } = useForm<z.infer<typeof updateCurrentUserSchema>>({
-    defaultValues: {
-      username: user?.username,
-      email: user?.email,
-      avatar: user?.avatar || "",
+    values: {
+      username: user?.username || "",
+      email: user?.email || "",
       phoneNumber: user?.phone || "",
     },
 
     resolver: zodResolver(updateCurrentUserSchema),
   });
 
+  const { mutateAsync, isPending: isLoadingChangeUser } = useMutation({
+    mutationFn: UserService.updateById,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["get-user-session"] });
+      addNotification({
+        id: crypto.randomUUID(),
+        date: new Date(),
+        title: "Профиль обновлен",
+        message: "Вы успешно обновили данные профиля",
+        userId: user?.id || "",
+        avatar: user?.avatar || "",
+      });
+      toast.success("Успешно обновлено");
+    },
+
+    onError: () => {
+      toast.error("Произошла ошибка при обновлении профиля");
+    },
+  });
+
   const onSubmit = async (data: z.infer<typeof updateCurrentUserSchema>) => {
     try {
-      await mutateAsync(
-        {
-          avatar: avatarPreview || user?.avatar,
-          email: data.email || user?.email,
-          username: data.username || user?.username,
-          phoneNumber: data.phoneNumber || user?.phone,
-        },
-        {
-          onSuccess: () => {
-            addNotification({
-              id: crypto.randomUUID(),
-              date: new Date(),
-              title: "Профиль обновлен",
-              message: "Вы успешно обновили данные профиля",
-              userId: user?.id || "",
-              avatar: user?.avatar || "",
-            });
-            toast.success("Успешно обновлено");
-          },
-        }
-      );
+      await mutateAsync({
+        avatar: avatarPreview || user?.avatar,
+        email: data.email,
+        username: data.username,
+        phoneNumber: data.phoneNumber,
+      });
     } catch (error) {
       console.log(error);
     }
@@ -112,8 +111,8 @@ export const FormEditProfile: FC = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="">
-      <div className="w-[1250px] flex items-center justify-between">
-        <div className="relative">
+      <div className="lg:w-[1250px] flex lg:flex-row flex-col lg:gap-0 gap-3 items-center lg:justify-between justify-center">
+        <div className="relative order-1">
           <Avatar className="h-28 w-28 bg-slate-400">
             <AvatarImage
               className="bg-slate-400"
@@ -140,16 +139,22 @@ export const FormEditProfile: FC = () => {
           />
         </div>
 
-        <Button type="submit" className="px-20 py-7">
-          {isLoadingChangeUser ? (
-            <Loader2 className="w-6 h-6 animate-spin" />
-          ) : (
-            "Сохранить"
-          )}
-        </Button>
+        <div className="flex flex-col gap-4 order-3">
+          <Button
+            type="submit"
+            className="px-20 py-7 "
+            disabled={isLoadingChangeUser}
+          >
+            {isLoadingChangeUser ? (
+              <Loader2 className="w-6 h-6 animate-spin" />
+            ) : (
+              "Сохранить"
+            )}
+          </Button>
+        </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-10 items-center mt-10">
+      <div className="grid lg:grid-cols-2 gap-10 items-center mt-10 order-2">
         <div className="">
           <Input
             {...register("username")}

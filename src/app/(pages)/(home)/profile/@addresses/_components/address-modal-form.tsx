@@ -2,10 +2,10 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useSession } from "@/hooks/use-session";
 import { cn } from "@/lib/utils";
 import { useAddressStore } from "@/store/address-store";
 import { useNotificationsStore } from "@/store/notifications-store";
-import { trpc } from "@/trpc-client/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { MapPin } from "lucide-react";
 import { FC } from "react";
@@ -18,7 +18,7 @@ interface IProps {
 }
 
 export const AddressModalForm: FC<IProps> = ({ buttonClassName }) => {
-  const { data: user } = trpc.authUser.getUserSession.useQuery();
+  const { user } = useSession();
   const { addNotification } = useNotificationsStore();
   const { addAddress } = useAddressStore();
 

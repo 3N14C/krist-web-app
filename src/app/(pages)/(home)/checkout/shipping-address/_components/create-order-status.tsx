@@ -32,12 +32,113 @@ const statusbar = [
 
 export const CreateOrderStatus: FC<IProps> = ({ orderPage }) => {
   return (
-    <div className="grid grid-cols-3">
-      {statusbar.map((status, idx) => {
-        const Icon = icons[status.icon];
-        return (
-          <div key={status.id} className="">
-            <div className="flex">
+    <div className="">
+      <div className="lg:grid grid-cols-3 flex items-center">
+        {statusbar.map((status, idx) => {
+          const Icon = icons[status.icon];
+          return (
+            <div key={status.id} className="">
+              <div className="flex">
+                <div className="flex flex-col items-center">
+                  <Button
+                    variant={
+                      orderPage?.includes(status.id) ? "default" : "ghost"
+                    }
+                    className={cn("cursor-default", {})}
+                  >
+                    <Icon
+                      name={status.icon}
+                      className={cn("", {
+                        "text-black": !orderPage?.includes(status.id),
+                        "text-white": orderPage?.includes(status.id),
+                      })}
+                    />
+                  </Button>
+
+                  <p>{status.name}</p>
+                </div>
+
+                {orderPage?.includes("payment") && idx !== 2 && idx !== 1 && (
+                  <div
+                    className={cn(
+                      "border-t border-dashed flex-1 mt-5 border-black lg:block hidden",
+                      {
+                        "border-[#c1c0c2]": !orderPage?.includes(status.id),
+                      }
+                    )}
+                  />
+                )}
+
+                {orderPage?.includes("review") && idx !== 2 && (
+                  <div
+                    className={cn(
+                      "border-t border-dashed flex-1 mt-5 border-black lg:block hidden",
+                      {
+                        "border-[#c1c0c2]": !orderPage?.includes(status.id),
+                      }
+                    )}
+                  />
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <div className="lg:hidden block">
+        {/* {statusbar.map((status, idx) => {
+          const Icon = icons[status.icon];
+          return (
+            <div key={status.id} className="">
+              <div className="flex">
+                <div className="flex flex-col items-center">
+                  <Button
+                    variant={
+                      orderPage?.includes(status.id) ? "default" : "ghost"
+                    }
+                    className={cn("cursor-default", {})}
+                  >
+                    <Icon
+                      name={status.icon}
+                      className={cn("", {
+                        "text-black": !orderPage?.includes(status.id),
+                        "text-white": orderPage?.includes(status.id),
+                      })}
+                    />
+                  </Button>
+
+                  <p>{status.name}</p>
+                </div>
+
+                {orderPage?.includes("payment") && idx !== 2 && idx !== 1 && (
+                  <div
+                    className={cn(
+                      "border-t border-dashed flex-1 mt-5 border-black",
+                      {
+                        "border-[#c1c0c2]": !orderPage?.includes(status.id),
+                      }
+                    )}
+                  />
+                )}
+
+                {orderPage?.includes("review") && idx !== 2 && (
+                  <div
+                    className={cn(
+                      "border-t border-dashed flex-1 mt-5 border-black",
+                      {
+                        "border-[#c1c0c2]": !orderPage?.includes(status.id),
+                      }
+                    )}
+                  />
+                )}
+              </div>
+            </div>
+          );
+        })} */}
+        {/* {statusbar.filter(status => status.id === orderPage).map((status, idx) => {
+          const Icon = icons[status.icon];
+          return (
+            <div key={status.id} className="">
               <div className="flex flex-col items-center">
                 <Button
                   variant={orderPage?.includes(status.id) ? "default" : "ghost"}
@@ -54,32 +155,10 @@ export const CreateOrderStatus: FC<IProps> = ({ orderPage }) => {
 
                 <p>{status.name}</p>
               </div>
-
-              {orderPage?.includes("payment") && idx !== 2 && idx !== 1 && (
-                <div
-                  className={cn(
-                    "border-t border-dashed flex-1 mt-5 border-black",
-                    {
-                      "border-[#c1c0c2]": !orderPage?.includes(status.id),
-                    }
-                  )}
-                />
-              )}
-
-              {orderPage?.includes("review") && idx !== 2 && (
-                <div
-                  className={cn(
-                    "border-t border-dashed flex-1 mt-5 border-black",
-                    {
-                      "border-[#c1c0c2]": !orderPage?.includes(status.id),
-                    }
-                  )}
-                />
-              )}
             </div>
-          </div>
-        );
-      })}
+          );
+        })} */}
+      </div>
     </div>
   );
 };

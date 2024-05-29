@@ -1,6 +1,8 @@
 "use client";
 
+import { CategoryService } from "@/actions/category/category-service";
 import { cn } from "@/lib/utils";
+import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { forwardRef } from "react";
 import {
@@ -11,11 +13,13 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "../ui/navigation-menu";
-import { trpc } from "@/trpc-client/client";
 import { Skeleton } from "../ui/skeleton";
 
 export const NavbarHeader = () => {
-  const { data: category, isLoading } = trpc.category.getCategories.useQuery();
+  const { data: category, isLoading } = useQuery({
+    queryKey: ["all-categories"],
+    queryFn: CategoryService.getAll,
+  });
 
   return (
     <NavigationMenu>

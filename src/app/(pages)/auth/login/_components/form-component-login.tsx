@@ -1,9 +1,10 @@
 "use client";
 
+import { AuthService } from "@/actions/user/auth/auth-service";
 import { Button } from "@/components/ui/button";
 import { userLoginSchema } from "@/server/zod-validators/user.validator";
-import { trpc } from "@/trpc-client/client";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -15,11 +16,21 @@ import { FormTitle } from "../../_components/form-title";
 import { InputValidated } from "../../_components/input-validated";
 
 export const FormComponentLogin: FC = () => {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const from = searchParams.get("from");
-  console.log(from);
-  const { mutateAsync, isLoading } = trpc.authUser.loginUser.useMutation();
-  const router = useRouter();
+
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: AuthService.signIn,
+    onSuccess: () => {
+      toast.success("Аутентикация прошла успешно");
+      router.replace(from ? from : "/");
+    },
+
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
 
   const {
     register,
@@ -35,29 +46,12 @@ export const FormComponentLogin: FC = () => {
   });
 
   const handleOnSubmit = async (data: z.infer<typeof userLoginSchema>) => {
-    try {
-      await mutateAsync(data, {
-        onSuccess: () => {
-          toast.success("Аутентикация прошла успешно");
-          router.replace(from ? from : "/");
-        },
-
-        onError: (error) => {
-          toast.error(error.message);
-        },
-      });
-    } catch (error) {
-      console.log(error);
-    }
+    await mutateAsync(data, {});
   };
 
   return (
     <div className="">
-      <FormTitle
-        // className="max-[639px]:text-center"
-        title="Welcome 👋"
-        subtitle="Please login here"
-      />
+      <FormTitle title="Добро пожаловать 👋" subtitle="Вход в аккаунт" />
 
       <form
         onSubmit={handleSubmit(handleOnSubmit)}
@@ -66,29 +60,29 @@ export const FormComponentLogin: FC = () => {
         <InputValidated
           errors={errors.email?.message}
           register={register("email")}
-          label="Email Address"
+          label="Почтовый адрес"
           placeholder="example@mail.ru"
         />
 
         <InputValidated
           errors={errors.password?.message}
           register={register("password")}
-          label="Password"
-          placeholder="Password"
+          label="Пароль"
+          placeholder="******"
         />
 
         <div className="flex items-center justify-between">
           <Link className="" href={"/auth/register"}>
-            Don't have an account?
+            Нет аккаунта?
           </Link>
 
           <Link className="" href={"/auth/forgot-password"}>
-            Forgot Password?
+            Забыли пароль?
           </Link>
         </div>
 
         <Button type="submit" className="text-base py-[30px]" size={"lg"}>
-          {isLoading ? <Loader2 className="animate-spin" /> : "Login"}
+          {isPending ? <Loader2 className="animate-spin" /> : "Войти"}
         </Button>
       </form>
     </div>

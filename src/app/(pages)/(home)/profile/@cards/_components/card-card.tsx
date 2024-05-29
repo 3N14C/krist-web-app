@@ -1,7 +1,7 @@
 "use client";
 
+import { useSession } from "@/hooks/use-session";
 import { ICard } from "@/interfaces/card.interface";
-import { trpc } from "@/trpc-client/client";
 import { Trash2 } from "lucide-react";
 import Image from "next/image";
 import { FC } from "react";
@@ -14,7 +14,7 @@ interface IProps {
 }
 
 export const CardItem: FC<IProps> = ({ cards, removeCard }) => {
-  const { data: user } = trpc.authUser.getUserSession.useQuery();
+  const { user } = useSession();
 
   const handleRemoveCard = (id: string) => {
     removeCard(id);

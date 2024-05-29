@@ -2,7 +2,7 @@
 
 import { BackButton } from "@/components/ui/back-button";
 import { Button } from "@/components/ui/button";
-import { trpc } from "@/trpc-client/client";
+import { useSession } from "@/hooks/use-session";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -14,7 +14,7 @@ import { FormTitle } from "../../_components/form-title";
 import { InputValidated } from "../../_components/input-validated";
 
 export const FormComponent: FC = () => {
-  const { data: user, isLoading } = trpc.authUser.getUserSession.useQuery();
+  const { user, isLoading } = useSession();
   const router = useRouter();
   const otp = Math.floor(100000 + Math.random() * 900000);
 

@@ -24,7 +24,7 @@ export const TotalOrder: FC<IProps> = ({
 
   return (
     <div className="flex flex-col gap-6 border px-5 py-4">
-      <div className="text-xl font-bold flex items-center justify-between border-b pb-4">
+      <div className="lg:text-xl font-bold flex items-center justify-between border-b pb-4">
         <p>Промежуточный итог</p>
         <p>${parseFloat(productsCart.totalPrice.toString()).toFixed(2)}</p>
       </div>
@@ -35,7 +35,7 @@ export const TotalOrder: FC<IProps> = ({
         <div className="flex items-center">
           <Input
             placeholder="Скидочный купон"
-            className="rounded-r-[0px] h-[60px] text-xl uppercase placeholder:normal-case"
+            className="rounded-r-[0px] h-[60px] lg:text-xl uppercase placeholder:normal-case"
           />
           <Button className="rounded-l-[0px] h-[60px]">Проверить</Button>
         </div>

@@ -1,11 +1,13 @@
 "use client";
 
+import { ServiceService } from "@/actions/service/service";
 import { InputValidated } from "@/app/(pages)/auth/_components/input-validated";
 import { Button } from "@/components/ui/button";
 import { CustomTitle } from "@/components/ui/custom-title";
+import { useSession } from "@/hooks/use-session";
 import { customOrderServiceSchema } from "@/server/zod-validators/post-custom-order-service";
-import { trpc } from "@/trpc-client/client";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { FC } from "react";
@@ -23,14 +25,14 @@ export const FormOrderService: FC = () => {
     resolver: zodResolver(customOrderServiceSchema),
   });
 
-  const { mutateAsync, isLoading } =
-    trpc.createCustomOrderService.createCustomOrderService.useMutation({
-      onSuccess: () => {
-        reset();
-        toast.success("Ваша заявка успешно отправлена");
-      },
-    });
-  const { data: user } = trpc.authUser.getUserSession.useQuery();
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: ServiceService.createUserService,
+    onSuccess: () => {
+      reset();
+      toast.success("Ваша заявка успешно отправлена");
+    },
+  });
+  const { user } = useSession();
   const router = useRouter();
 
   const handleOnSubmit = async (
@@ -69,7 +71,7 @@ export const FormOrderService: FC = () => {
       />
 
       <Button type="submit" className="py-9 text-xl">
-        {isLoading ? <Loader2 className="animate-spin" /> : "Отправить заявку"}
+        {isPending ? <Loader2 className="animate-spin" /> : "Отправить заявку"}
       </Button>
     </form>
   );

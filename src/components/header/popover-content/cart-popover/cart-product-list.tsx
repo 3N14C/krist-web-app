@@ -11,11 +11,7 @@ import { useRouter } from "next/navigation";
 export const CartProductList: FC = () => {
   const { productsCart: cartProducts } = useCartStore();
   const router = useRouter();
-
-  // const totalPrice = cartProducts.products?.reduce((acc, product) => {
-  //   return acc + product.price * product.count;
-  // }, 0);
-
+  
   return (
     <div className="px-5 py-2">
       <p className="p-2 rounded-lg">

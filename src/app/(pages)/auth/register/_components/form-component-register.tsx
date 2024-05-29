@@ -1,9 +1,10 @@
 "use client";
 
+import { AuthService } from "@/actions/user/auth/auth-service";
 import { Button } from "@/components/ui/button";
 import { userRegisterSchema } from "@/server/zod-validators/user.validator";
-import { trpc } from "@/trpc-client/client";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -15,8 +16,19 @@ import { FormTitle } from "../../_components/form-title";
 import { InputValidated } from "../../_components/input-validated";
 
 export const FormComponentRegister: FC = () => {
-  const { mutateAsync, isLoading } = trpc.authUser.registerUser.useMutation();
   const router = useRouter();
+  
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: AuthService.signUp,
+    onSuccess: () => {
+      toast.success("Вы успешно зарегистрировались");
+      router.replace("/");
+    },
+
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
 
   const {
     register,
@@ -34,15 +46,8 @@ export const FormComponentRegister: FC = () => {
 
   const onSubmit = async (data: z.infer<typeof userRegisterSchema>) => {
     try {
-      await mutateAsync(data, {
-        onSuccess: () => {
-          toast.success("Вы успешно зарегистрировались");
-          router.replace("/");
-        },
-
-        onError: (error) => {
-          toast.error(error.message);
-        },
+      await mutateAsync({
+        ...data,
       });
     } catch (error) {
       console.log(error);
@@ -51,7 +56,7 @@ export const FormComponentRegister: FC = () => {
 
   return (
     <div className="">
-      <FormTitle title="Welcome" subtitle="Please login here" />
+      <FormTitle title="Добро пожаловать" subtitle="Создание нового аккаунта" />
 
       <form
         onSubmit={handleSubmit(onSubmit)}
@@ -60,35 +65,35 @@ export const FormComponentRegister: FC = () => {
         <InputValidated
           errors={errors.username?.message}
           register={register("username")}
-          label="Username"
-          placeholder="John Doe"
+          label="ИМя пользователя"
+          placeholder="Example"
         />
 
         <InputValidated
           errors={errors.email?.message}
           register={register("email")}
-          label="Email Address"
+          label="Почтовый адрес"
           placeholder="example@mail.ru"
         />
 
         <InputValidated
           errors={errors.password?.message}
           register={register("password")}
-          label="Password"
-          placeholder="Password"
+          label="Пароль"
+          placeholder="******"
         />
 
         <Link className="text-end" href={"/auth/login"}>
-          Already have an account?
+          Уже есть аккаунт?
         </Link>
 
         <Button type="submit" className="text-base py-[30px]" size={"lg"}>
-          {isLoading ? (
+          {isPending ? (
             <div className="">
               <Loader2 className="animate-spin" />
             </div>
           ) : (
-            <>Register</>
+            <>Создать аккаунт</>
           )}
         </Button>
       </form>

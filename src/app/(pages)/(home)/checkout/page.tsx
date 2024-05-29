@@ -7,11 +7,7 @@ interface Props {}
 const Page: NextPage<Props> = ({}) => {
   return (
     <div>
-      <CustomTitle title="Подтвердите заказ" />
-
-      <div className="mt-10">
-        <ProductTable />
-      </div>
+      <ProductTable />
     </div>
   );
 };

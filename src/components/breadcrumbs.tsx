@@ -18,7 +18,7 @@ interface IProps {
 export const Breadcrumbs: FC<IProps> = ({ productName }) => {
   return (
     <Breadcrumb>
-      <BreadcrumbList className="text-xl">
+      <BreadcrumbList className="lg:text-xl">
         <BreadcrumbItem>
           <BreadcrumbLink href="/">Главная</BreadcrumbLink>
         </BreadcrumbItem>

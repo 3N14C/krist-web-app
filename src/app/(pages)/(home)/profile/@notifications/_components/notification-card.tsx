@@ -10,7 +10,7 @@ interface IProps {
   userId: string;
 }
 
-export const NotificationCard: FC<IProps> = ({ notifications, userId }) => {
+export const NotificationCardComponent: FC<IProps> = ({ notifications, userId }) => {
   return (
     <div className="flex flex-col gap-10">
       {notifications
@@ -26,7 +26,7 @@ export const NotificationCard: FC<IProps> = ({ notifications, userId }) => {
               <div className="flex items-center gap-5">
                 {notification.avatar ? (
                   <Avatar className="h-20 w-20">
-                    <AvatarImage src={notification.avatar} />
+                    <AvatarImage src={notification?.avatar ?? "/"} />
                     <AvatarFallback>user</AvatarFallback>
                   </Avatar>
                 ) : (

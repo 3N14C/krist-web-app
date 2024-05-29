@@ -1,22 +1,24 @@
 "use client";
 
+import { CollectionService } from "@/actions/collection/collection-service";
 import { Button } from "@/components/ui/button";
 import { CustomTitle } from "@/components/ui/custom-title";
+import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib/utils";
+import { usePagination } from "@mantine/hooks";
+import { Collection } from "@prisma/client";
+import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { FC, useEffect, useState } from "react";
 import { CollectionCard } from "../collection-card";
-import { category } from "@/lib/category";
-import { trpc } from "@/trpc-client/client";
-import { usePagination } from "@mantine/hooks";
-import { Collection } from "@prisma/client";
-import { cn } from "@/lib/utils";
-import { Skeleton } from "@/components/ui/skeleton";
 
 const ITEMS_PER_PAGE = 3;
 
 export const CollectionSection: FC = () => {
-  const { data: collections, isLoading } =
-    trpc.collection.getCollections.useQuery();
+  const { data: collections, isLoading } = useQuery({
+    queryKey: ["all-collections"],
+    queryFn: CollectionService.getAll,
+  });
 
   const [visibleResults, setVisibleResults] = useState<Collection[]>([]);
 

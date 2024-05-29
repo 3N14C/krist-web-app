@@ -29,10 +29,10 @@ const Layout = ({
   const [profilePage] = useQueryState("profilePage", parseAsString);
 
   return (
-    <div className="max-w-[1600px] mx-auto mt-[100px]">
+    <div className="max-w-[1600px] mx-auto lg:mt-[100px]">
       <CustomTitle title="Профиль" />
 
-      <div className="flex items-start my-14 gap-16">
+      <div className="flex lg:flex-row flex-col items-start lg:my-14 my-5 gap-16">
         {children}
 
         <div className="">
@@ -41,7 +41,7 @@ const Layout = ({
           {profilePage === "wishlist" && wishlist}
           {profilePage === "addresses" && addresses}
           {profilePage === "cards" && cards}
-          {profilePage === "notifications" && notifications}
+          {/* {profilePage === "notifications" && notifications} */}
           {profilePage === "settings" && settings}
         </div>
       </div>

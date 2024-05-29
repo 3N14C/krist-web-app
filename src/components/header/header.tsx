@@ -22,7 +22,7 @@ export const Header: FC = () => {
           alt="logo"
           width={1000}
           height={1000}
-          className="w-32 h-32"
+          className="w-24 h-24"
         />
 
         <MobileMenu />

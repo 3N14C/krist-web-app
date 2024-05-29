@@ -15,7 +15,7 @@ export const CollectionCard: FC<IProps> = ({ collections }) => {
     <div className="grid lg:grid-cols-3 justify-items-center max-[845px]:gap-10">
       {collections?.map((collection) => (
         <Link
-          href={`/products-catalog/?categoryId=${collection.categoryId}&collectionId=${collection.id}`}
+          href={`/products-catalog?categoryId=${collection.categoryId}&collectionId=${collection.id}`}
           key={collection.id}
           className="flex flex-col items-center gap-[20px] relative"
         >

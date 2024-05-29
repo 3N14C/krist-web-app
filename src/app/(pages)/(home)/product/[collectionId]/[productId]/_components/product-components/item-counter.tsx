@@ -51,7 +51,7 @@ export const ProductCounter: FC<IProps> = ({
   };
 
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex lg:flex-row flex-col lg:items-center gap-3">
       <div className="flex items-center justify-evenly gap-2 border border-black rounded-lg w-48 py-3">
         <Minus
           onClick={() => setCounter(counter - 1)}
@@ -69,15 +69,25 @@ export const ProductCounter: FC<IProps> = ({
       >
         Добавить в корзину
       </Button>
-      <div className="border border-black rounded-lg py-2 px-3">
+      <div className="border border-black rounded-lg py-2 px-3 flex justify-center">
         <Heart
           // @ts-ignore
           onClick={() => addProduct(product)}
-          className={cn("cursor-pointer", {
+          className={cn("cursor-pointer lg:block hidden", {
             "text-red-400": products.some((p) => p.id === product?.id),
           })}
           fill={products.some((p) => p.id === product?.id) ? "red" : "none"}
           size={40}
+        />
+
+        <Heart
+          // @ts-ignore
+          onClick={() => addProduct(product)}
+          className={cn("cursor-pointer block lg:hidden", {
+            "text-red-400": products.some((p) => p.id === product?.id),
+          })}
+          fill={products.some((p) => p.id === product?.id) ? "red" : "none"}
+          size={20}
         />
       </div>
     </div>

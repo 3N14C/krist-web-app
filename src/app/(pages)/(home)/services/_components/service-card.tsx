@@ -1,9 +1,12 @@
 "use client";
 
+import { OrderServiceService } from "@/actions/order-service/order-service-service";
 import { Button } from "@/components/ui/button";
+import { useSession } from "@/hooks/use-session";
 import { createServiceOrderSchema } from "@/server/zod-validators/post-create-service-order";
-import { trpc } from "@/trpc-client/client";
 import { Service } from "@prisma/client";
+import { useMutation } from "@tanstack/react-query";
+import { Loader2 } from "lucide-react";
 import { FC } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -13,18 +16,32 @@ interface IProps {
 }
 
 export const ServiceCard: FC<IProps> = ({ service }) => {
-  const { mutateAsync } =
-    trpc.createOrderService.createServiceOrder.useMutation({
-      onSuccess: () => {
-        toast.success("Заявка успешно отправлена");
-      },
-    });
-  const { data: user } = trpc.authUser.getUserSession.useQuery();
+  // const { mutateAsync } =
+  //   trpc.createOrderService.createServiceOrder.useMutation({
+  //     onSuccess: () => {
+  //       toast.success("Заявка успешно отправлена");
+  //     },
+  //   });
+
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: OrderServiceService.create,
+    onSuccess: () => {
+      toast.success("Заявка успешно отправлена");
+    },
+    onError: () => {
+      toast.error("Не удалось отправить заявку");
+    },
+  });
+
+  const { user } = useSession();
 
   const handleCreateOrder = async (
     data: z.infer<typeof createServiceOrderSchema>
   ) => {
-    await mutateAsync(data);
+    user &&
+      (await mutateAsync({
+        ...data,
+      }));
     console.log("CREATED");
   };
 
@@ -40,7 +57,7 @@ export const ServiceCard: FC<IProps> = ({ service }) => {
           size={"lg"}
           className=""
         >
-          Оставить заявку
+          {isPending ? <Loader2 className="animate-spin" /> : "Оставить заявку"}
         </Button>
       </div>
     </div>

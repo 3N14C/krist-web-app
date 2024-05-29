@@ -1,21 +1,28 @@
 "use client";
 
+import { ReviewService } from "@/actions/review/review";
 import { InputValidated } from "@/app/(pages)/auth/_components/input-validated";
 import { Button } from "@/components/ui/button";
+import { useSession } from "@/hooks/use-session";
 import { cn } from "@/lib/utils";
-import { postReviewSchema } from "@/server/zod-validators/post-review.validator";
-import { trpc } from "@/trpc-client/client";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Loader2, Star } from "lucide-react";
-import { useParams, useRouter } from "next/navigation";
-import { FC, useState } from "react";
+import { useParams } from "next/navigation";
+import { FC } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
 export const ReviewForm: FC = () => {
-  const { data: user } = trpc.authUser.getUserSession.useQuery();
-  const { mutateAsync, isLoading } = trpc.createReview.useMutation();
+  const queryClient = useQueryClient();
+  const { user } = useSession();
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: ReviewService.create,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["product-by-id", productId] });
+    },
+  });
   const { productId } = useParams<{ productId: string }>();
 
   const schema = z.object({
@@ -43,18 +50,10 @@ export const ReviewForm: FC = () => {
 
   const onSubmit = async (data: z.infer<typeof schema>) => {
     try {
-      await mutateAsync(
-        {
-          ...data,
-          userId: user?.id!,
-        },
-        {
-          onSuccess: () => {
-            toast.success("Отзыв успешно оставлен");
-            window.location.reload();
-          },
-        }
-      );
+      await mutateAsync({
+        ...data,
+        userId: user?.id!,
+      });
     } catch (error) {
       console.log(error);
     }
@@ -62,7 +61,7 @@ export const ReviewForm: FC = () => {
 
   return (
     <div className="">
-      <p className="font-bold text-2xl">Оставить отзыв</p>
+      <p className="font-bold lg:text-2xl">Оставить отзыв</p>
 
       <div className="mt-5 flex flex-col gap-2">
         <p className="text-lg">Оценка</p>
@@ -105,7 +104,7 @@ export const ReviewForm: FC = () => {
               label="Заголовок"
               errors={errors?.title?.message}
               placeholder="Заголовок"
-              className="w-full text-xl"
+              className="lg:w-full lg:text-xl text-lg"
               labelClassName="text-lg"
             />
 
@@ -114,12 +113,12 @@ export const ReviewForm: FC = () => {
               label="Сообщение"
               errors={errors?.body?.message}
               placeholder="Сообщение"
-              className="w-full text-xl"
+              className="w-full lg:text-xl text-lg"
               labelClassName="text-lg"
             />
 
-            <Button type="submit" className="w-2/12 py-7 text-lg">
-              {isLoading ? (
+            <Button type="submit" className="lg:w-2/12 py-7 text-lg">
+              {isPending ? (
                 <Loader2 className="animate-spin" />
               ) : (
                 "Оставить отзыв"

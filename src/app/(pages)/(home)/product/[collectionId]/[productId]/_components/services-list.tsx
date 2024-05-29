@@ -28,7 +28,7 @@ const ServiceItem: FC<IServiceItemProps> = ({ icon, title, description }) => {
 
 export const ServicesList: FC = () => {
   return (
-    <div className="lg:flex items-center justify-between md:grid">
+    <div className="flex lg:flex-row flex-col lg:gap-0 gap-10 lg:items-center justify-between">
       <ServiceItem
         icon="Package"
         title="бесплатная доставка"

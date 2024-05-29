@@ -1,7 +1,8 @@
 "use client";
 
+import { ProductService } from "@/actions/product/product-service";
 import { ProductCard } from "@/app/(pages)/(home)/_components/product-card";
-import { trpc } from "@/trpc-client/client";
+import { useQuery } from "@tanstack/react-query";
 import { FC } from "react";
 
 interface IProps {
@@ -10,11 +11,10 @@ interface IProps {
 }
 
 export const RelatedProducts: FC<IProps> = ({ collectionId, productId }) => {
-  const { data: relatedProducts, isLoading } =
-    trpc.products.getRelatedProducts.useQuery({
-      collectionId: collectionId,
-      productId: productId,
-    });
+  const { data: relatedProducts, isLoading } = useQuery({
+    queryKey: ["related-products", collectionId, productId],
+    queryFn: async () => ProductService.getRelated({ productId, collectionId }),
+  });
 
   return (
     <div className="">

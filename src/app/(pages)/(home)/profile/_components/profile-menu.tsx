@@ -1,16 +1,21 @@
 "use client";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { cn } from "@/lib/utils";
-import { trpc } from "@/trpc-client/client";
 import {
-  Bell,
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useSession } from "@/hooks/use-session";
+import { cn } from "@/lib/utils";
+import {
   CreditCard,
   Heart,
   MapPin,
   Package,
   Settings,
-  UserRound,
+  UserRound
 } from "lucide-react";
 import { parseAsString, useQueryState } from "nuqs";
 import { FC } from "react";
@@ -46,11 +51,11 @@ const navMenu = [
     title: "Управление оплатой",
   },
 
-  {
-    id: "notifications",
-    icon: <Bell />,
-    title: "Уведомления",
-  },
+  // {
+  //   id: "notifications",
+  //   icon: <Bell />,
+  //   title: "Уведомления",
+  // },
 
   {
     id: "settings",
@@ -60,8 +65,7 @@ const navMenu = [
 ];
 
 export const ProfileMenu: FC = () => {
-  const { data: user, isLoading: isLoadingUser } =
-    trpc.authUser.getUserSession.useQuery();
+  const { user, isLoading } = useSession();
 
   const [profilePage, setProfilePage] = useQueryState(
     "profilePage",
@@ -82,7 +86,7 @@ export const ProfileMenu: FC = () => {
         </div>
       </div>
 
-      <div className="border pt-5">
+      <div className="border pt-5 lg:block hidden">
         {navMenu.map((item) => (
           <div
             onClick={() => setProfilePage(item.id)}
@@ -101,6 +105,34 @@ export const ProfileMenu: FC = () => {
             </div>
           </div>
         ))}
+      </div>
+
+      <div className="lg:hidden block">
+        <Accordion type="multiple">
+          <AccordionItem value="profile-user">
+            <AccordionTrigger>Навигация</AccordionTrigger>
+            <AccordionContent>
+              {navMenu.map((item) => (
+                <div
+                  onClick={() => setProfilePage(item.id)}
+                  key={item.id}
+                  className={cn(
+                    "text-black dark:text-white py-5 px-5 cursor-pointer transition duration-500 ",
+                    {
+                      "bg-[#1b1b1b] text-white dark:text-black transition duration-500 animate-slide-right bg-gradient-to-r from-black from-50% to-white dark:from-white dark to-50% bg-left-bottom bg-[length:200%_100%]":
+                        profilePage === item.id,
+                    }
+                  )}
+                >
+                  <div className="flex items-center gap-3">
+                    {item.icon}
+                    <p className="lg:text-lg">{item.title}</p>
+                  </div>
+                </div>
+              ))}
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
       </div>
     </div>
   );

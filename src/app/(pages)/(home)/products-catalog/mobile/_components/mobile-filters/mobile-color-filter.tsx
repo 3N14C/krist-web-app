@@ -1,5 +1,6 @@
 "use client";
 
+import { ColorService } from "@/actions/color/color-service";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -8,13 +9,16 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { trpc } from "@/trpc-client/client";
 import { Color } from "@prisma/client";
+import { useQuery } from "@tanstack/react-query";
 import { parseAsArrayOf, parseAsString, useQueryState } from "nuqs";
 import { FC } from "react";
 
 export const MobileColorFilter: FC = () => {
-  const { data: colors } = trpc.colors.getColors.useQuery();
+  const { data: colors } = useQuery({
+    queryKey: ["all-colors"],
+    queryFn: ColorService.getAll,
+  });
 
   const [colorParams, setColorParams] = useQueryState(
     "colorId",

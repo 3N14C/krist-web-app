@@ -1,7 +1,7 @@
 "use client";
 
+import { useSession } from "@/hooks/use-session";
 import { IAddress } from "@/interfaces/address.interface";
-import { trpc } from "@/trpc-client/client";
 import { PhoneCall, Trash2 } from "lucide-react";
 import { FC } from "react";
 import { toast } from "sonner";
@@ -13,7 +13,7 @@ interface IProps {
 }
 
 export const AddressCard: FC<IProps> = ({ address, removeAddress }) => {
-  const { data: user } = trpc.authUser.getUserSession.useQuery();
+  const { user } = useSession();
 
   const handleRemoveAddress = (id: string) => {
     removeAddress(id);

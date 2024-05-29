@@ -44,7 +44,7 @@ model User {
   order                Order[]
   orderService         OrderService?       @relation(fields: [orderServiceId], references: [id])
   orderServiceId       String?
-  CustomOrderService   CustomOrderService? @relation(fields: [customOrderServiceId], references: [id])
+  customOrderService   CustomOrderService? @relation(fields: [customOrderServiceId], references: [id])
   customOrderServiceId String?
 }
 
@@ -125,10 +125,9 @@ model Order {
   size      String
   quantity  Int
 
-  user      User    @relation(fields: [userId], references: [id])
-  product   Product @relation(fields: [productId], references: [id])
-  userId    String
-  productId String
+  user    User      @relation(fields: [userId], references: [id])
+  product Product[]
+  userId  String
 }
 
 model Service {

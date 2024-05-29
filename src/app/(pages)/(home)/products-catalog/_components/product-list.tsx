@@ -1,18 +1,19 @@
 "use client";
 
+import { CategoryService } from "@/actions/category/category-service";
+import { ProductService } from "@/actions/product/product-service";
+import { ProductSkeleton } from "@/components/skeleton/product-skeleton";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Skeleton } from "@/components/ui/skeleton";
-import { trpc } from "@/trpc-client/client";
+import { useQuery } from "@tanstack/react-query";
 import { Filter } from "lucide-react";
 import { parseAsArrayOf, parseAsString, useQueryState } from "nuqs";
 import { FC } from "react";
 import { ProductCard } from "../../_components/product-card";
-import { ProductSkeleton } from "@/components/skeleton/product-skeleton";
 
 interface IProps {}
 
@@ -31,17 +32,29 @@ export const ProductList: FC<IProps> = () => {
   const [colorParams] = useQueryState("colorId", parseAsArrayOf(parseAsString));
   const [sizeParams] = useQueryState("sizeId", parseAsArrayOf(parseAsString));
 
-  const { data: products, isLoading } =
-    trpc.products.getProductsByslug.useQuery({
-      collectionId: collectionParams || [],
-      categoryId: categoryParams || [],
-      colorId: colorParams || [],
-      sizeId: sizeParams || [],
-      price: Number(priceParams)!,
-    });
+  const { data: products, isLoading } = useQuery({
+    queryKey: [
+      "product-by-slug",
+      collectionParams,
+      categoryParams,
+      colorParams,
+      sizeParams,
+      priceParams,
+    ],
+    queryFn: async () =>
+      await ProductService.getBySlug({
+        collectionId: collectionParams || [],
+        categoryId: categoryParams || [],
+        colorId: colorParams || [],
+        sizeId: sizeParams || [],
+        price: Number(priceParams)!,
+      }),
+  });
 
-  const { data: category } = trpc.category.getCategoryById.useQuery({
-    id: categoryParams || [],
+  const { data: category } = useQuery({
+    queryKey: ["category-by-id", categoryParams],
+    queryFn: async () =>
+      await CategoryService.getById({ categoryId: categoryParams ?? [] }),
   });
 
   return (
