@@ -2,9 +2,11 @@ import { NextResponse } from "next/server";
 import prisma from "../../../../../../../prisma/prisma-client";
 
 export const GET = async () => {
-  const services = await prisma.service.findMany({
-    include: {},
+  const orderServices = await prisma.serviceOrder.findMany({
+    include: {
+      user: true,
+    },
   });
 
-  return NextResponse.json(services);
+  return NextResponse.json(orderServices);
 };

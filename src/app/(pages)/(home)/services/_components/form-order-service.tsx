@@ -16,6 +16,9 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 export const FormOrderService: FC = () => {
+  const { user } = useSession();
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
@@ -32,19 +35,21 @@ export const FormOrderService: FC = () => {
       toast.success("Ваша заявка успешно отправлена");
     },
   });
-  const { user } = useSession();
-  const router = useRouter();
 
   const handleOnSubmit = async (
     data: z.infer<typeof customOrderServiceSchema>
   ) => {
-    user
-      ? await mutateAsync({
-          userId: user?.id,
-          message: data.message,
-          title: data.title,
-        })
-      : router.replace("/auth/login?from=/services");
+    if (!user) {
+      toast.error("Вы должны быть авторизованы");
+      router.replace("/auth/login?from=/services");
+      return;
+    }
+
+    await mutateAsync({
+      userId: user.id,
+      message: data.message,
+      title: data.title,
+    });
   };
 
   return (

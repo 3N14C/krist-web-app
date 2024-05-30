@@ -38,17 +38,13 @@ model User {
   phone  String?
   avatar String?
 
-  role                 Role                @default(USER)
-  Session              Session[]
-  review               Review[]
-  order                Order[]
-  orderService         OrderService?       @relation(fields: [orderServiceId], references: [id])
-  orderServiceId       String?
-  customOrderService   CustomOrderService? @relation(fields: [customOrderServiceId], references: [id])
-  customOrderServiceId String?
+  role         Role           @default(USER)
+  Session      Session[]
+  review       Review[]
+  order        Order[]
+  serviceOrder ServiceOrder[]
 }
 
-// PRODUCTS CATEGORY COLLECTION
 model Category {
   id String @id @default(uuid())
 
@@ -135,24 +131,16 @@ model Service {
 
   name         String
   img          String?
-  orderService OrderService[]
+  serviceOrder ServiceOrder[]
 }
 
-model OrderService {
+model ServiceOrder {
   id String @id @default(uuid())
-
-  user User[]
 
   createdAt DateTime @default(now())
 
+  user      User    @relation(fields: [userId], references: [id])
+  userId    String
   service   Service @relation(fields: [serviceId], references: [id])
   serviceId String
-}
-
-model CustomOrderService {
-  id String @id @default(uuid())
-
-  user    User[]
-  title   String
-  message String
 }

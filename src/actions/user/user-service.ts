@@ -1,6 +1,5 @@
 import { axiosInstance } from "@/configs/axios-config";
 import { updateCurrentUserSchema } from "@/server/zod-validators/update-current-user.validator";
-import { UserOrderService } from "@/types/user-types";
 import { Role, User } from "@prisma/client";
 import { z } from "zod";
 
@@ -25,9 +24,9 @@ export const UserService = {
     return response.data;
   },
 
-  getOrderService: async ({ userId }: { userId: string }) => {
-    const response = await axiosInstance.get<UserOrderService>(
-      `user/get-order-service?id=${userId}`
+  getById: async ({ userId }: { userId: string }) => {
+    const response = await axiosInstance.get<User>(
+      `user/get-by-id?id=${userId}`
     );
 
     return response.data;

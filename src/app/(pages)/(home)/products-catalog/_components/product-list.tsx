@@ -54,7 +54,7 @@ export const ProductList: FC<IProps> = () => {
   const { data: category } = useQuery({
     queryKey: ["category-by-id", categoryParams],
     queryFn: async () =>
-      await CategoryService.getById({ categoryId: categoryParams ?? [] }),
+      await CategoryService.getByIds({ categoryId: categoryParams ?? [] }),
   });
 
   return (

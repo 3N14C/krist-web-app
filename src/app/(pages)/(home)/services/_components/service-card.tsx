@@ -1,12 +1,13 @@
 "use client";
 
-import { OrderServiceService } from "@/actions/order-service/order-service-service";
+import { ServiceOrderService } from "@/actions/service-order/order-service-service";
 import { Button } from "@/components/ui/button";
 import { useSession } from "@/hooks/use-session";
 import { createServiceOrderSchema } from "@/server/zod-validators/post-create-service-order";
 import { Service } from "@prisma/client";
 import { useMutation } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { FC } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -16,15 +17,11 @@ interface IProps {
 }
 
 export const ServiceCard: FC<IProps> = ({ service }) => {
-  // const { mutateAsync } =
-  //   trpc.createOrderService.createServiceOrder.useMutation({
-  //     onSuccess: () => {
-  //       toast.success("Заявка успешно отправлена");
-  //     },
-  //   });
+  const { user } = useSession();
+  const router = useRouter();
 
   const { mutateAsync, isPending } = useMutation({
-    mutationFn: OrderServiceService.create,
+    mutationFn: ServiceOrderService.create,
     onSuccess: () => {
       toast.success("Заявка успешно отправлена");
     },
@@ -33,16 +30,23 @@ export const ServiceCard: FC<IProps> = ({ service }) => {
     },
   });
 
-  const { user } = useSession();
+  const handleCreateOrder = async ({ serviceId }: { serviceId: string }) => {
+    if (!user) {
+      return toast.error("Сначала авторизируйтесь");
+    }
 
-  const handleCreateOrder = async (
-    data: z.infer<typeof createServiceOrderSchema>
-  ) => {
-    user &&
-      (await mutateAsync({
-        ...data,
-      }));
-    console.log("CREATED");
+    if (!user.phone) {
+      toast.error(
+        "Для оформления заявки необходимо указать ваш номер телефона"
+      );
+      router.push("/profile?profilePage=user");
+      return;
+    }
+
+    await mutateAsync({
+      serviceId: serviceId,
+      userId: user.id,
+    });
   };
 
   return (
@@ -50,10 +54,9 @@ export const ServiceCard: FC<IProps> = ({ service }) => {
       <div className="text-xl flex flex-col items-start gap-3">
         <p className="">{service.name}</p>
         <Button
-          onClick={() => {
-            user &&
-              handleCreateOrder({ serviceId: service.id, userId: user.id });
-          }}
+          onClick={async () =>
+            await handleCreateOrder({ serviceId: service.id })
+          }
           size={"lg"}
           className=""
         >

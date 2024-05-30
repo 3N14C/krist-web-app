@@ -18,6 +18,10 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { FC, useState } from "react";
 import { UserModal } from "./modals/user-modal";
+import { AddCategoryModal } from "./modals/add-category-modal/add-category-modal";
+import { CategoryModal } from "./modals/category-modal/category-modal";
+import { AddCollectionModal } from "./modals/add-collection-modal/add-collection-modal";
+import { CollectionModal } from "./modals/collection-modal/collection-modal";
 
 const tableColumns = [
   {
@@ -49,15 +53,30 @@ const tableColumns = [
 
 export const AdminTable: FC = () => {
   const [openUserModal, setOpenUserModal] = useState<boolean>(false);
+  const [openAddCategoryModal, setOpenAddCategoryModal] =
+    useState<boolean>(false);
+  const [openCategoryModal, setOpenCategoryModal] = useState<boolean>(false);
+  const [openAddCollectionModal, setOpenAddCollectionModal] =
+    useState<boolean>(false);
+  const [openCollectionModal, setOpenCollectionModal] =
+    useState<boolean>(false);
+
   const [userId, setUserId] = useState<string>("");
+  const [categoryId, setCategoryId] = useState<string>("");
+  const [collectionId, setCollectionId] = useState<string>("");
+
+  const openStatesment = (name: string) => {
+    if (name === "Категории") setOpenAddCategoryModal(true);
+    if (name === "Коллекции") setOpenAddCollectionModal(true);
+  };
 
   const { data: categories } = useQuery({
-    queryKey: ["admin-categories"],
+    queryKey: ["admin-categories-list"],
     queryFn: CategoryService.getAll,
   });
 
   const { data: collections } = useQuery({
-    queryKey: ["admin-collections"],
+    queryKey: ["admin-collections-list"],
     queryFn: CollectionService.getAll,
   });
 
@@ -88,13 +107,37 @@ export const AdminTable: FC = () => {
         setOpen={setOpenUserModal}
         userId={userId}
       />
+      <AddCategoryModal
+        open={openAddCategoryModal}
+        setOpen={setOpenAddCategoryModal}
+      />
+      <AddCollectionModal
+        open={openAddCollectionModal}
+        setOpen={setOpenAddCollectionModal}
+      />
+      <CategoryModal
+        open={openCategoryModal}
+        setOpen={setOpenCategoryModal}
+        categoryId={categoryId}
+      />
+      <CollectionModal
+        open={openCollectionModal}
+        setOpen={setOpenCollectionModal}
+        collectionId={collectionId}
+      />
+
       <Table>
         {/* <TableCaption>A list of your recent invoices.</TableCaption> */}
         <TableHeader>
           <TableRow>
             {tableColumns.map((column) => (
               <TableHead key={column.id} className="font-medium">
-                {column.name}
+                <p
+                  onClick={() => openStatesment(column.name)}
+                  className="hover:text-primary hover:underline underline-offset-2 transition duration-300 cursor-pointer max-w-fit"
+                >
+                  {column.name}
+                </p>
               </TableHead>
             ))}
           </TableRow>
@@ -121,12 +164,17 @@ export const AdminTable: FC = () => {
             <TableCell className="">
               <div className="flex flex-col gap-5">
                 {categories?.map((category) => (
-                  <p
-                    className="hover:underline underline-offset-2 transition duration-300 cursor-pointer"
+                  <div
+                    onClick={() => {
+                      setOpenCategoryModal(true);
+                      setCategoryId(category.id);
+                    }}
                     key={category.id}
                   >
-                    {category.name}
-                  </p>
+                    <p className="hover:underline underline-offset-2 transition duration-300 cursor-pointer">
+                      {category.name}
+                    </p>
+                  </div>
                 ))}
               </div>
             </TableCell>
@@ -135,6 +183,10 @@ export const AdminTable: FC = () => {
               <div className="flex flex-col gap-5">
                 {collections?.map((collection) => (
                   <p
+                    onClick={() => {
+                      setOpenCollectionModal(true);
+                      setCollectionId(collection.id);
+                    }}
                     className="hover:underline underline-offset-2 transition duration-300 cursor-pointer"
                     key={collection.id}
                   >

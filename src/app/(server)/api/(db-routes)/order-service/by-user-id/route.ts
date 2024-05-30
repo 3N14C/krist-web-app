@@ -1,15 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "../../../../../../../prisma/prisma-client";
 
-export const POST = async (req: NextRequest) => {
+export const GET = async (req: NextRequest) => {
   const { searchParams } = req.nextUrl;
-  const userId = searchParams.get("userId");
-  const serviceId = searchParams.get("serviceId");
+  const userId = searchParams.get("id");
 
-  const orderService = await prisma.serviceOrder.create({
-    data: {
-      serviceId: serviceId as string,
+  const orderService = await prisma.serviceOrder.findMany({
+    where: {
       userId: userId as string,
+    },
+
+    include: {
+      user: true,
+      service: true,
     },
   });
 
