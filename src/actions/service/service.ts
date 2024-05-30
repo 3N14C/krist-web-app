@@ -1,13 +1,13 @@
 import { axiosInstance } from "@/configs/axios-config";
 import { customOrderServiceSchema } from "@/server/zod-validators/post-custom-order-service";
-import { CustomOrderService, Service } from "@prisma/client";
+import { Service } from "@prisma/client";
 import { z } from "zod";
 
 export const ServiceService = {
   createUserService: async (
     input: z.infer<typeof customOrderServiceSchema>
   ) => {
-    const response = await axiosInstance.post<CustomOrderService>(
+    const response = await axiosInstance.post(
       "service/user-service/create",
       input
     );
