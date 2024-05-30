@@ -11,12 +11,8 @@ export const GET = async (req: NextRequest) => {
     },
 
     include: {
-      orderService: {
-        include: {
-          service: true,
-        },
-      },
-      customOrderService: true,
+      serviceOrder: true,
+      ticketServiceOrder: true,
     },
   });
 
