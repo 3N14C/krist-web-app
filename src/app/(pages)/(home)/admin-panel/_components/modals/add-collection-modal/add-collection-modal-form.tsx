@@ -1,6 +1,5 @@
 "use client";
 
-import { CategoryService } from "@/actions/category/category-service";
 import { CollectionService } from "@/actions/collection/collection-service";
 import { InputValidated } from "@/app/(pages)/auth/_components/input-validated";
 import { Button } from "@/components/ui/button";

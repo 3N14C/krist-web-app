@@ -1,5 +1,6 @@
 "use client";
 
+import { CollectionService } from "@/actions/collection/collection-service";
 import {
   Dialog,
   DialogContent,
@@ -7,12 +8,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { FC } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { CategoryService } from "@/actions/category/category-service";
-import { CollectionModalForm } from "./collection-modal-form";
-import { CollectionService } from "@/actions/collection/collection-service";
 import { Collection } from "@prisma/client";
+import { useQuery } from "@tanstack/react-query";
+import { FC } from "react";
+import { CollectionModalForm } from "./collection-modal-form";
 
 interface IProps {
   open: boolean;

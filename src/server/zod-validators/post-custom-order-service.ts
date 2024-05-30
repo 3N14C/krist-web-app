@@ -1,7 +1,6 @@
 import { z } from "zod";
 
 export const customOrderServiceSchema = z.object({
-  userId: z.string().optional(),
   title: z
     .string()
     .min(1, "Это поле обязательно")

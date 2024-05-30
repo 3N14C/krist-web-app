@@ -5,7 +5,7 @@ import { Category } from "@prisma/client";
 export const CategoryService = {
   getAll: async () => {
     const response =
-      await axiosInstance.get<CategoryCollection[]>("/category/get-all");
+      await axiosInstance.get<CategoryCollection[]>("category/get-all");
 
     return response.data;
   },

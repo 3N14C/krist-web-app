@@ -4,18 +4,14 @@ import { customOrderServiceSchema } from "@/server/zod-validators/post-custom-or
 import { NextRequest, NextResponse } from "next/server";
 
 export const POST = async (req: NextRequest) => {
-  const input: z.infer<typeof customOrderServiceSchema> = await req.json();
+  const input: z.infer<typeof customOrderServiceSchema> & { userId: string } =
+    await req.json();
 
-  const service = await prisma.customOrderService.create({
+  const service = await prisma.ticketServiceOrder.create({
     data: {
-      user: {
-        connect: {
-          id: input.userId,
-        },
-      },
-
       title: input.title,
       message: input.title,
+      userId: input.userId,
     },
   });
 

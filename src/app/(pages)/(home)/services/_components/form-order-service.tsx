@@ -54,7 +54,7 @@ export const FormOrderService: FC = () => {
 
   return (
     <form
-      onSubmit={handleSubmit(async (data) => await handleOnSubmit(data))}
+      onSubmit={handleSubmit(handleOnSubmit)}
       className="flex flex-col gap-10"
     >
       <CustomTitle title="Вы также можете оставить свою заявку" />
