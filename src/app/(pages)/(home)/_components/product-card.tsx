@@ -83,8 +83,8 @@ export const ProductCard: FC<IProps> = ({ products, gridCols }) => {
                     name: product?.name,
                     price: product?.price,
                     img: product?.img,
-                    size: product?.sizes[0],
-                    color: product?.colors[0],
+                    size: product?.sizes?.[0],
+                    color: product?.colors?.[0],
 
                     count: 1,
                   });
@@ -107,9 +107,9 @@ export const ProductCard: FC<IProps> = ({ products, gridCols }) => {
           <div className="mt-3 flex flex-col gap-1">
             <p className="text-lg font-semibold capitalize">{product?.name}</p>
             <p>
-              {parseFloat(product?.price.toString()).toLocaleString("us-US", {
+              {parseFloat(product?.price.toString()).toLocaleString("ru-RU", {
                 style: "currency",
-                currency: "USD",
+                currency: "RUB",
                 maximumFractionDigits: 2,
               })}
             </p>

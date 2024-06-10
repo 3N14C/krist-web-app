@@ -74,7 +74,11 @@ export const ProductPage: FC<IProps> = ({ productId }) => {
           <ProductRating product={product} />
 
           <p className="text-2xl text-[#1b1b1b]">
-            ${parseFloat(product?.price.toString()!).toFixed(2)}
+            {product?.price.toLocaleString("ru-RU", {
+              style: "currency",
+              currency: "RUB",
+              maximumFractionDigits: 2,
+            })}
           </p>
 
           <p className="text-[#37353b]">{product?.description}</p>
