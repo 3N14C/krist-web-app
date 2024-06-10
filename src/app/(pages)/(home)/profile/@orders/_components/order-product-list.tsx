@@ -48,7 +48,11 @@ export const OrderProductList: FC = () => {
                 </div>
 
                 <p className="font-bold text-center col-span-5">
-                  ${product.price * order.quantity}
+                  {(product.price * order.quantity).toLocaleString("ru-RU", {
+                    style: "currency",
+                    currency: "RUB",
+                    maximumFractionDigits: 2,
+                  })}
                 </p>
 
                 <div className="flex flex-col gap-3">

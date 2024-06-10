@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation";
 export const CartProductList: FC = () => {
   const { productsCart: cartProducts } = useCartStore();
   const router = useRouter();
-  
+
   return (
     <div className="px-5 py-2">
       <p className="p-2 rounded-lg">
@@ -32,7 +32,13 @@ export const CartProductList: FC = () => {
           <div className="text-xl font-bold flex items-center justify-between">
             <p className="">Итого:</p>
 
-            <p>${parseFloat(cartProducts.totalPrice.toString()).toFixed(2)}</p>
+            <p>
+              {cartProducts.totalPrice.toLocaleString("ru-RU", {
+                style: "currency",
+                currency: "RUB",
+                maximumFractionDigits: 2,
+              })}
+            </p>
           </div>
 
           <Button

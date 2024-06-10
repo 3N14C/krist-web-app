@@ -20,13 +20,19 @@ export const TotalOrder: FC<IProps> = ({
   const { productsCart } = useCartStore();
   const router = useRouter();
 
-  const deliveryCharge = 5;
+  const deliveryCharge = 600;
 
   return (
     <div className="flex flex-col gap-6 border px-5 py-4">
       <div className="lg:text-xl font-bold flex items-center justify-between border-b pb-4">
         <p>Промежуточный итог</p>
-        <p>${parseFloat(productsCart.totalPrice.toString()).toFixed(2)}</p>
+        <p>
+          {productsCart.totalPrice.toLocaleString("ru-RU", {
+            style: "currency",
+            currency: "RUB",
+            maximumFractionDigits: 2,
+          })}
+        </p>
       </div>
 
       <div className="mt-5">
@@ -43,13 +49,23 @@ export const TotalOrder: FC<IProps> = ({
 
       <div className="flex items-center justify-between text-xl border-b pb-4">
         <p>Стоимость Доставки</p>
-        <p>${parseFloat(deliveryCharge.toString()).toFixed(2)}</p>
+        <p>
+          {deliveryCharge.toLocaleString("ru-RU", {
+            style: "currency",
+            currency: "RUB",
+            maximumFractionDigits: 2,
+          })}
+        </p>
       </div>
 
       <div className="flex items-center justify-between text-xl font-bold">
         <p>Общий итог</p>
         <p>
-          ${parseFloat((deliveryCharge + productsCart.totalPrice).toString()).toFixed(2)}
+          {(deliveryCharge + productsCart.totalPrice).toLocaleString("ru-RU", {
+            style: "currency",
+            currency: "RUB",
+            maximumFractionDigits: 2,
+          })}
         </p>
       </div>
 

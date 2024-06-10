@@ -36,13 +36,6 @@ export const MobileTable: FC<IProps> = ({
 
       <div className="flex flex-col w-full gap-10 mt-10">
         <div className="w-full col-span-3">
-          {/* <div className="grid grid-cols-4 text-xl">
-            <p className="">Товары</p>
-            <p>Цена</p>
-            <p>Количество</p>
-            <p>Итоговая цена</p>
-          </div> */}
-
           <div className="mt-10 flex flex-col gap-14">
             {productsCart.products.map((product) => (
               <div key={product.id} className="grid gap-3 items-center">
@@ -69,7 +62,12 @@ export const MobileTable: FC<IProps> = ({
                 </div>
 
                 <p className="text-xl">
-                  Цена: ${parseFloat(product.price.toString()).toFixed(2)}
+                  Цена:{" "}
+                  {product.price.toLocaleString("ru-RU", {
+                    style: "currency",
+                    currency: "RUB",
+                    maximumFractionDigits: 2,
+                  })}
                 </p>
 
                 <div className="flex items-center justify-evenly gap-2 border border-black rounded-lg w-48 py-3">
@@ -86,10 +84,12 @@ export const MobileTable: FC<IProps> = ({
 
                 <div className="flex items-center gap-20">
                   <p className="text-xl">
-                    Итоговая цена: $
-                    {parseFloat(
-                      (product.price * product.count).toString()
-                    ).toFixed(2)}
+                    Итоговая цена:
+                    {(product.price * product.count).toLocaleString("ru-RU", {
+                      style: "currency",
+                      currency: "RUB",
+                      maximumFractionDigits: 2,
+                    })}
                   </p>
 
                   <Trash2

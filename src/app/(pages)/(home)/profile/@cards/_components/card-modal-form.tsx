@@ -110,6 +110,7 @@ export const CardModalForm: FC<IProps> = ({ buttonClassName }) => {
             {...register("cardNumber")}
             placeholder="0000 0000 0000 0000"
             className="py-6 text-lg"
+            maxLength={16}
           />
 
           {errors.cardNumber && (

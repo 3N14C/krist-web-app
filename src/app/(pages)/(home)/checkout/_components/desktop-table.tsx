@@ -68,7 +68,11 @@ export const DesktopTable: FC<IProps> = ({
                 </div>
 
                 <p className="text-xl">
-                  ${parseFloat(product.price.toString()).toFixed(2)}
+                  {product.price.toLocaleString("ru-RU", {
+                    style: "currency",
+                    currency: "RUB",
+                    maximumFractionDigits: 2,
+                  })}
                 </p>
 
                 <div className="flex items-center justify-evenly gap-2 border border-black rounded-lg w-48 py-3">
@@ -85,10 +89,11 @@ export const DesktopTable: FC<IProps> = ({
 
                 <div className="flex items-center gap-20">
                   <p className="text-xl">
-                    $
-                    {parseFloat(
-                      (product.price * product.count).toString()
-                    ).toFixed(2)}
+                    {(product.price * product.count).toLocaleString("ru-RU", {
+                      style: "currency",
+                      currency: "RUB",
+                      maximumFractionDigits: 2,
+                    })}
                   </p>
 
                   <Trash2

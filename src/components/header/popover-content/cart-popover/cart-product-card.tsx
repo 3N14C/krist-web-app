@@ -38,7 +38,11 @@ export const CartProductCard: FC<IProps> = ({
             <div className="flex items-center gap-1 font-bold">
               <p>{product.count}</p>
               <p>x</p>
-              <p>${parseFloat(product.price.toString()).toFixed(2)}</p>
+              <p>{product.price.toLocaleString('ru-RU', {
+                style: "currency",
+                currency: "RUB",
+                maximumFractionDigits: 2,
+              })}</p>
             </div>
 
             <p>
