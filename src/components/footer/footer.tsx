@@ -113,7 +113,7 @@ export const Footer: FC = () => {
           <div className="mt-10 flex flex-col gap-5">
             <div className="flex items-center gap-2">
               <PhoneCall color="#bfbfc0" />
-              <p>(704) 555-0127</p>
+              <p>8 (904) 555-0127</p>
             </div>
 
             <div className="flex items-center gap-2">
@@ -124,7 +124,7 @@ export const Footer: FC = () => {
             <div className="flex items-start gap-2">
               <MapPin />
               <p className="max-w-[250px]">
-                3891 Ranchview Dr. Richardson, California 62639
+                Иркутск, 62639
               </p>
             </div>
           </div>
